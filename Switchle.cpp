@@ -17,6 +17,11 @@ void Switchle::GenerateAnswer()
         it ++;
     }
     answer = *it;
+    //Set up the count of each letter
+    for(char c: answer)
+    {
+        letterAndCount[c] ++;
+    }
 }
 void Switchle::StartGame()
 {
@@ -90,18 +95,39 @@ bool Switchle::Check()
 }
 void Switchle::FindAccuracyGrid(string guess)
 {
+    vector<string> output (answer.size(), "");
+    unordered_map<char, int> copyLAC = letterAndCount;
     for(int i = 0; i < answer.size(); i++)
     {
+        //If it is in the right index then add 2 to the output
+        //Also, remove one occurunce of the letter since it has been processed
         if(guess[i] == answer[i])
         {
-            cout << "2 ";
-            continue;
+            output[i] = "2 ";
+            copyLAC[guess[i]] --;
         }
-        if(answer.find(guess[i]) < 5)
+    }
+    for(int i = 0; i < answer.size(); i++)
+    {
+        //If the highest priority position of the letter is found, skip it
+        if(output[i] == "2 ")
         {
-            cout << "1 ";
             continue;
         }
-        cout << "0 ";
+        //If an occurance of the letter is still present in the word then place a 1 and subtract an occurance
+        if(copyLAC[guess[i]] > 0)
+        {
+            output[i] = "1 ";
+            copyLAC[guess[i]] --;
+        }
+        //Otherwise, the letter is not present so add a 0
+        else
+        {
+            output[i] = "0 ";
+        }
+    }
+    for(string s: output)
+    {
+        cout << s;
     }
 }
