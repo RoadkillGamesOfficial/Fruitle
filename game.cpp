@@ -12,8 +12,8 @@ int main()
     while(!end)
     {
         end = game.Check();
-        game.TakeGuess();
         game.Update();
+        game.TakeGuess();
     }
     return 0;
 }
